@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_management/widgets/custom_colors.dart';
+import 'package:task_management/widgets/custom_widgets.dart';
 class customTextFromField extends StatelessWidget {
   String hintText;
   TextEditingController controller;
@@ -13,6 +14,7 @@ customTextFromField({
 @override
 Widget build(BuildContext context) {
   return TextFormField(
+
     keyboardType: inputType,
     controller: controller,
     validator: validator,
@@ -20,6 +22,8 @@ Widget build(BuildContext context) {
         filled: true,
       fillColor: fieldColor,
       hintText: hintText,
+      hintStyle: hintTextStyle(),
+      contentPadding: EdgeInsets.symmetric(horizontal: 10),
 
       enabledBorder: OutlineInputBorder(
 

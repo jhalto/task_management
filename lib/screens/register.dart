@@ -7,7 +7,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/api_key/base_url.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:task_management/screens/verification_page.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_colors.dart';
@@ -22,12 +22,13 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  TextEditingController _firstNameContoller = TextEditingController();
-  TextEditingController _lastNameContoller = TextEditingController();
-  TextEditingController _emailContoller = TextEditingController();
-  TextEditingController _phoneContoller = TextEditingController();
-  TextEditingController _passwordContoller = TextEditingController();
-  TextEditingController _confirmPasswordContoller = TextEditingController();
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isObsecure1 = true;
   bool isObsecure2 = true;
@@ -35,24 +36,26 @@ class _RegisterState extends State<Register> {
   String? photo;
   File? picked;
 
-  pickImageFromCamera()async{
+  pickImageFromCamera() async {
     ImagePicker picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.camera);
-    if(pickedImage!= null){
+    if (pickedImage != null) {
       setState(() {
         picked = File(pickedImage.path);
       });
     }
   }
-  pickImageFromGallary()async{
+
+  pickImageFromGallery() async {
     ImagePicker picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if(pickedImage!= null){
+    if (pickedImage != null) {
       setState(() {
         picked = File(pickedImage.path);
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -63,126 +66,129 @@ class _RegisterState extends State<Register> {
           resizeToAvoidBottomInset: false,
           body: SingleChildScrollView(
             child: Stack(
-
               children: [
                 Container(
-                  height: 220,
+                  height: 160,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.elliptical(300,130),bottomRight: Radius.elliptical(300,130)),
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.elliptical(300, 130),
+                        bottomRight: Radius.elliptical(300, 130)),
                     image: DecorationImage(
                       image: AssetImage('lib/images/bd_calling.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-
                 Padding(
-                  padding: const EdgeInsets.all(25.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       children: [
-                        SizedBox(height: 165,),
+                        SizedBox(
+                          height: 120,
+                        ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 90,right: 90),
+                          padding: const EdgeInsets.only(left: 90, right: 90),
                           child: Container(
-
                             alignment: Alignment.center,
                             height: 50,
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                                color: nil,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                              color: fieldColor,
                             ),
                             child: Center(
                               child: Text(
                                 'Sign Up',
-                                style: myStyle(24,FontWeight.bold),
+                                style: myStyle(24, FontWeight.bold),
                               ),
                             ),
                           ),
                         ),
-
                         SizedBox(height: 15),
-                        Text("Welcome to Bdcalling",style: myStyle(22,FontWeight.bold)),
-                        SizedBox(height: 5,),
-                        Text("Please enter your details below to get started",style: myStyle(15,FontWeight.bold)),
-                        SizedBox(height: 25,),
+                        Text("Welcome to Bdcalling",
+                            style: myStyle(22, FontWeight.bold)),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text("Please enter your details below to get started",
+                            style: myStyle(15, FontWeight.bold)),
+                        SizedBox(
+                          height: 20,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
                             Center(
                               child: CircleAvatar(
-
-                                radius: 100,
-                                backgroundImage: picked!= null?FileImage(picked!):AssetImage("lib/images/user.png"),
+                                radius: 80,
+                                backgroundImage: picked != null
+                                    ? FileImage(picked!)
+                                    : AssetImage("lib/images/user.png"),
                               ),
                             ),
-                            SizedBox(height: 10,),
-                            Align(
-                              alignment: Alignment.center,
-                              child: addButton(text: "Add Image",
-                                  onPressed: (){
-                                    showModalBottomSheet(context: context, builder: (context) {
-                                      return Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-
-                                          children: [
-
-                                          ],
-                                        ),
-                                      );
-
-                                    },);
-                                  }
-                              ),
-                            ),
-                            Text("Name",style: myStyle(18,FontWeight.bold),),
-                            SizedBox(height: 5,),
-                            Row(
-                              children: [
-                                Expanded(child: customTextFromField(
-                                  hintText: "First Name",
-                                  controller: _firstNameContoller,
-                                  validator: (value) {
-                                    if (value!.isEmpty || value == null) {
-                                      return "name can't be empty";
-                                    }
-                                    if (value.length < 3) {
-                                      return "must at least 3 letter";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                ),
-                                SizedBox(width: 5,),
-                                Expanded(child: customTextFromField(
-                                  hintText: "Last Name",
-                                  controller: _lastNameContoller,
-                                  validator: (value) {
-                                    if (value!.isEmpty || value == null) {
-                                      return "name can't be empty";
-                                    }
-                                    if (value.length < 3) {
-                                      return "must at least 3 letter";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                ),
-                              ],
-                            ),
-
                             SizedBox(
                               height: 5,
                             ),
-                            Text("Email",style: myStyle(18,FontWeight.bold),),
-                            SizedBox(height: 5,),
+                            Center(
+                              child: Column(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        pickImageFromCamera();
+                                      },
+                                      icon: Icon(Icons.image)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: customTextFromField(
+                                    hintText: "First Name",
+                                    controller: _firstNameController,
+                                    validator: (value) {
+                                      if (value!.isEmpty || value == null) {
+                                        return "name can't be empty";
+                                      }
+                                      if (value.length < 3) {
+                                        return "must at least 3 letter";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Expanded(
+                                  child: customTextFromField(
+
+                                    hintText: "Last Name",
+                                    controller: _lastNameController,
+                                    validator: (value) {
+                                      if (value!.isEmpty || value == null) {
+                                        return "name can't be empty";
+                                      }
+                                      if (value.length < 3) {
+                                        return "must at least 3 letter";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
                             customTextFromField(
-                              hintText: "Enter your email",
-                              controller: _emailContoller,
+                              hintText: "Email",
+                              controller: _emailController,
                               validator: (value) {
                                 if (value!.isEmpty || value == null) {
                                   return "email can't be null";
@@ -196,59 +202,68 @@ class _RegisterState extends State<Register> {
                               },
                             ),
                             SizedBox(
-                              height: 5,
+                              height: 15,
                             ),
-                            Text("Phone",style: myStyle(18,FontWeight.bold),),
-                            SizedBox(height: 5,),
-
                             IntlPhoneField(
+
+                              controller: _phoneController,
                               onChanged: (value) {
                                 setState(() {
                                   phone = value.completeNumber;
                                 });
-
                               },
                               initialCountryCode: 'BD',
+                              dropdownTextStyle: TextStyle(
+                                  color: Colors.black38,
+                                  fontSize: 16 // Customize text color
+                                  // Customize font size
+                                  // Customize font weight
+                                  ),
                               decoration: InputDecoration(
-                                hintText: "Enter Your Phone",
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(width: 3, color: Colors.black12),
-                                  borderRadius: BorderRadius.circular(25),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10
                                 ),
-                                border: OutlineInputBorder(),
+                                fillColor: fieldColor,
+                                filled: true,
+                                hintText: "Phone",
+                                hintStyle: TextStyle(color: Colors.black26),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+
+                                    color: fieldColor,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                    width: 3,
-                                    color: Colors.blueAccent,
+                                    color: fieldColor,
                                   ),
-                                  borderRadius: BorderRadius.circular(25),
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 5,
+                            customTextFromField(
+                                hintText: "Address",
+                                controller: _addressController,
                             ),
-
-                            IconButton(onPressed: (){
-                              pickImageFromCamera();
-                            }, icon: Icon(Icons.photo)),
-                            Text("Password",style: myStyle(18,FontWeight.bold),),
-                            SizedBox(height: 5,),
+                            SizedBox(height: 15,),
                             TextFormField(
                               decoration: InputDecoration(
-                                  hintText: "Enter your password",
+                                  hintStyle: hintTextStyle(),
+                                  filled: true,
+                                  fillColor: fieldColor,
+                                  hintText: "password",
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(width: 2.5, color: Colors.black12),
-                                    borderRadius: BorderRadius.circular(25),
+                                    borderSide: BorderSide(color: fieldColor),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   border: OutlineInputBorder(),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      width: 2.5,
-                                      color: Colors.blueAccent,
+                                      color: fieldColor,
                                     ),
-                                    borderRadius: BorderRadius.circular(25),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   suffixIcon: IconButton(
                                       onPressed: () {
@@ -257,9 +272,9 @@ class _RegisterState extends State<Register> {
                                         });
                                       },
                                       icon: isObsecure1 == true
-                                          ? Icon(Icons.visibility)
-                                          : Icon(Icons.visibility_off))),
-                              controller: _passwordContoller,
+                                          ? Icon(Icons.visibility,color: Colors.black38,)
+                                          : Icon(Icons.visibility_off,color: Colors.black38,))),
+                              controller: _passwordController,
                               obscureText: isObsecure1,
                               validator: (value) {
                                 // Reset error message
@@ -285,7 +300,8 @@ class _RegisterState extends State<Register> {
                                   return '• Digit is missing.\n';
                                 }
                                 // Contains at least one special character
-                                if (!value.contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
+                                if (!value.contains(
+                                    RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
                                   return '• Special character is missing.\n';
                                 }
 
@@ -293,24 +309,26 @@ class _RegisterState extends State<Register> {
                               },
                             ),
                             SizedBox(
-                              height: 5,
+                              height: 15,
                             ),
-                            Text("Confirm Password",style: myStyle(18,FontWeight.bold),),
-                            SizedBox(height: 5,),
+
                             TextFormField(
                                 decoration: InputDecoration(
+                                    hintStyle: hintTextStyle(),
+                                    fillColor: fieldColor,
+                                    filled: true,
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                     hintText: "Enter your password",
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(width: 2.5, color: Colors.black12),
-                                      borderRadius: BorderRadius.circular(25),
+                                      borderSide: BorderSide(color: fieldColor),
+                                      borderRadius: BorderRadius.circular(5),
                                     ),
                                     border: OutlineInputBorder(),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        width: 2.5,
-                                        color: Colors.blueAccent,
+                                        color: fieldColor,
                                       ),
-                                      borderRadius: BorderRadius.circular(25),
+                                      borderRadius: BorderRadius.circular(5),
                                     ),
                                     suffixIcon: IconButton(
                                         onPressed: () {
@@ -319,44 +337,44 @@ class _RegisterState extends State<Register> {
                                           });
                                         },
                                         icon: isObsecure2 == true
-                                            ? Icon(Icons.visibility)
-                                            : Icon(Icons.visibility_off))),
-                                controller: _confirmPasswordContoller,
+                                            ? Icon(Icons.visibility,color: Colors.black38,)
+                                            : Icon(Icons.visibility_off,color: Colors.black38,))),
+                                controller: _confirmPasswordController,
                                 obscureText: isObsecure2,
                                 onChanged: (value) {
                                   value = value;
                                 },
                                 validator: (value) {
-
                                   // Reset error message
-                                  if(_passwordContoller.text.toString() != _confirmPasswordContoller.text.toString()){
+                                  if (_passwordController.text.toString() !=
+                                      _confirmPasswordController.text
+                                          .toString()) {
                                     return "Password doesn't match";
                                   }
-                                }
-                            ),
+                                }),
                             SizedBox(
                               height: 5,
                             ),
-
-                          ],),
-                        SizedBox(height: 25,),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
                         customButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-
                               showToastMessage("succesfull");
                             }
                           },
                           text: "Sign Up",
                         ),
-
-
-                        SizedBox(height: 300,)
+                        SizedBox(
+                          height: 300,
+                        )
                       ],
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
@@ -367,66 +385,64 @@ class _RegisterState extends State<Register> {
 
   var isloading = false;
 
-  // getregister() async {
-  //   try {
-  //     setState(() {
-  //       isloading = true;
-  //     });
-  //
-  //     print("Email before sending: ${_emailContoller.text.toString()}");
-  //     String url = "${baseUrl}/user/register";
-  //     var request = http.MultipartRequest("POST", Uri.parse(url));
-  //     request.fields['first']
-  //     var map = <String, dynamic>{};
-  //     map["name"] = _nameContoller.text.toString();
-  //     map['email'] = _emailContoller.text.toString();
-  //     map['phone'] = phone.toString();
-  //     map['password'] = _passwordContoller.text.toString();
-  //     if(picked!= null){
-  //       var img = await http.MultipartFile.fromPath("photo", picked!.path);
-  //       request.files.add(img);
-  //     }else{
-  //
-  //     }
-  //
-  //     var response = await http.post(Uri.parse(url), body: map);
-  //     var data = jsonDecode(response.body);
-  //
-  //     print("Request Payload: ${jsonEncode(map)}");
-  //     print(response.statusCode);
-  //     print(data);
-  //     setState(() {
-  //       isloading = false;
-  //     });
-  //     if (response.statusCode == 200) {
-  //       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //       sharedPreferences.setString('email', _emailContoller.text.toString());
-  //
-  //       String email = _emailContoller.text.toString();
-  //       Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => VerificationPage(
-  //             ),
-  //           )).then(
-  //             (value) {
-  //           setState(() {
-  //             _nameContoller.clear();
-  //             _emailContoller.clear();
-  //             _phoneContoller.clear();
-  //             _passwordContoller.clear();
-  //           });
-  //         },
-  //       );
-  //     }
-  //
-  //     setState(() {
-  //       isloading = false;
-  //     });
-  //   } catch (e) {
-  //     print("Error: $e");
-  //   }
-  // }
-
-
+// getregister() async {
+//   try {
+//     setState(() {
+//       isloading = true;
+//     });
+//
+//     print("Email before sending: ${_emailContoller.text.toString()}");
+//     String url = "${baseUrl}/user/register";
+//     var request = http.MultipartRequest("POST", Uri.parse(url));
+//     request.fields['first']
+//     var map = <String, dynamic>{};
+//     map["name"] = _nameContoller.text.toString();
+//     map['email'] = _emailContoller.text.toString();
+//     map['phone'] = phone.toString();
+//     map['password'] = _passwordContoller.text.toString();
+//     if(picked!= null){
+//       var img = await http.MultipartFile.fromPath("photo", picked!.path);
+//       request.files.add(img);
+//     }else{
+//
+//     }
+//
+//     var response = await http.post(Uri.parse(url), body: map);
+//     var data = jsonDecode(response.body);
+//
+//     print("Request Payload: ${jsonEncode(map)}");
+//     print(response.statusCode);
+//     print(data);
+//     setState(() {
+//       isloading = false;
+//     });
+//     if (response.statusCode == 200) {
+//       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+//       sharedPreferences.setString('email', _emailContoller.text.toString());
+//
+//       String email = _emailContoller.text.toString();
+//       Navigator.push(
+//           context,
+//           MaterialPageRoute(
+//             builder: (context) => VerificationPage(
+//             ),
+//           )).then(
+//             (value) {
+//           setState(() {
+//             _nameContoller.clear();
+//             _emailContoller.clear();
+//             _phoneContoller.clear();
+//             _passwordContoller.clear();
+//           });
+//         },
+//       );
+//     }
+//
+//     setState(() {
+//       isloading = false;
+//     });
+//   } catch (e) {
+//     print("Error: $e");
+//   }
+// }
 }

@@ -10,12 +10,14 @@ class customButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return ElevatedButton(
-      child: Text('$text',style: myStyle(18),),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.black,
-        minimumSize: Size(double.infinity, 50),
+    return MaterialButton(
+      child: Text('$text',style: TextStyle(color: sada,fontWeight: FontWeight.bold),),
+       height: 45,
+      minWidth: double.infinity,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5)
       ),
+      color: nil,
       onPressed: onPressed,
 
 

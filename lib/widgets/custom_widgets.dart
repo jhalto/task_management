@@ -18,6 +18,11 @@ styleTextButton(){
     color: Colors.white
   );
 }
+hintTextStyle(){
+  return TextStyle(
+    color: Colors.black26
+  );
+}
 var spinkit = SpinKitSpinningLines(
   color: Colors.red,
 );
