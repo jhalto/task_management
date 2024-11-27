@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/api_key/base_url.dart';
 import 'package:http/http.dart' as http;
@@ -34,6 +36,7 @@ class _RegisterState extends State<Register> {
   bool isObsecure2 = true;
   String phone = '';
   String? photo;
+  File? defaultImageFile;
   File? picked;
 
   pickImageFromCamera() async {
@@ -134,64 +137,90 @@ class _RegisterState extends State<Register> {
                             Center(
                               child: Column(
                                 children: [
-                                  IconButton(
-                                      onPressed: () {
-                                        showModalBottomSheet(context: context, builder: (context) {
+                                  GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        builder: (context) {
                                           return Container(
+                                            height: 200,
                                             decoration: BoxDecoration(
-
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
                                               gradient: LinearGradient(
                                                   begin: Alignment.bottomRight,
-
                                                   colors: [
-                                                fieldColor,Colors.blue.withOpacity(.3)
-
-                                              ]),
+                                                    fieldColor,
+                                                    Colors.blue.withOpacity(.3)
+                                                  ]),
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 25.0,horizontal: 15),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
                                               child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   whiteButton(
-                                                  onPressed: (){
-                                                    pickImageFromCamera();
-                                                    Navigator.pop(context);
-                                                  },
+                                                    onPressed: () {
+                                                      pickImageFromCamera();
+                                                      Navigator.pop(context);
+                                                    },
                                                     widget: Row(
-                                                       mainAxisAlignment: MainAxisAlignment.center,
+                                                      mainAxisAlignment:MainAxisAlignment.center,
                                                       children: [
-                                                        Icon(Icons.photo_camera),
-                                                        SizedBox(width: 15,),
-                                                        Text("Add image from Camera")
+                                                        Icon(
+                                                            Icons.photo_camera),
+                                                        SizedBox(
+                                                          width: 15,
+                                                        ),
+                                                        Text("Camera")
                                                       ],
                                                     ),
                                                   ),
-                                                  SizedBox(height: 15,),
+                                                  SizedBox(
+                                                    height: 15,
+                                                  ),
                                                   whiteButton(
-                                                    onPressed: (){
+                                                    onPressed: () {
                                                       pickImageFromGallery();
                                                       Navigator.pop(context);
                                                     },
                                                     widget: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.center,
                                                       children: [
                                                         Icon(Icons.photo_album_outlined),
-                                                        SizedBox(width: 15,),
-                                                        Text("Add image from Camera")
+                                                        SizedBox(
+                                                          width: 15,
+                                                        ),
+                                                        Text("Gallery")
                                                       ],
                                                     ),
                                                   )
-
                                                 ],
                                               ),
                                             ),
                                           );
-                                        },);
-                                      },
-                                      icon: Icon(Icons.image)),
+                                        },
+                                      );
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.image),
+                                        Text(
+                                          "Add Image",
+                                          style: myStyle(16, FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -220,7 +249,6 @@ class _RegisterState extends State<Register> {
                                 ),
                                 Expanded(
                                   child: customTextFromField(
-
                                     hintText: "Last Name",
                                     controller: _lastNameController,
                                     validator: (value) {
@@ -257,56 +285,56 @@ class _RegisterState extends State<Register> {
                             SizedBox(
                               height: 15,
                             ),
-                            IntlPhoneField(
-
-                              controller: _phoneController,
-                              onChanged: (value) {
-                                setState(() {
-                                  phone = value.completeNumber;
-                                });
-                              },
-                              initialCountryCode: 'BD',
-                              dropdownTextStyle: TextStyle(
-                                  color: Colors.black38,
-                                  fontSize: 16 // Customize text color
-                                  // Customize font size
-                                  // Customize font weight
-                                  ),
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 10
-                                ),
-                                fillColor: fieldColor,
-                                filled: true,
-                                hintText: "Phone",
-                                hintStyle: TextStyle(color: Colors.black26),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-
-                                    color: fieldColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: fieldColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
+                            // IntlPhoneField(
+                            //   controller: _phoneController,
+                            //   onChanged: (value) {
+                            //     setState(() {
+                            //       phone = value.completeNumber;
+                            //     });
+                            //   },
+                            //   initialCountryCode: 'BD',
+                            //   dropdownTextStyle: TextStyle(
+                            //       color: Colors.black38,
+                            //       fontSize: 16 // Customize text color
+                            //       // Customize font size
+                            //       // Customize font weight
+                            //       ),
+                            //   decoration: InputDecoration(
+                            //     contentPadding:
+                            //         EdgeInsets.symmetric(horizontal: 10),
+                            //     fillColor: fieldColor,
+                            //     filled: true,
+                            //     hintText: "Phone",
+                            //     hintStyle: TextStyle(color: Colors.black26),
+                            //     enabledBorder: OutlineInputBorder(
+                            //       borderSide: BorderSide(
+                            //         color: fieldColor,
+                            //       ),
+                            //       borderRadius: BorderRadius.circular(5),
+                            //     ),
+                            //     focusedBorder: OutlineInputBorder(
+                            //       borderSide: BorderSide(
+                            //         color: fieldColor,
+                            //       ),
+                            //       borderRadius: BorderRadius.circular(5),
+                            //     ),
+                            //   ),
+                            // ),
                             customTextFromField(
-                                hintText: "Address",
-                                controller: _addressController,
+                              hintText: "Address",
+                              controller: _addressController,
                             ),
-                            SizedBox(height: 15,),
+                            SizedBox(
+                              height: 15,
+                            ),
                             TextFormField(
                               decoration: InputDecoration(
                                   hintStyle: hintTextStyle(),
                                   filled: true,
                                   fillColor: fieldColor,
                                   hintText: "Password",
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 10),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: fieldColor),
                                     borderRadius: BorderRadius.circular(5),
@@ -325,8 +353,14 @@ class _RegisterState extends State<Register> {
                                         });
                                       },
                                       icon: isObsecure1 == true
-                                          ? Icon(Icons.visibility,color: Colors.black38,)
-                                          : Icon(Icons.visibility_off,color: Colors.black38,))),
+                                          ? Icon(
+                                              Icons.visibility,
+                                              color: Colors.black38,
+                                            )
+                                          : Icon(
+                                              Icons.visibility_off,
+                                              color: Colors.black38,
+                                            ))),
                               controller: _passwordController,
                               obscureText: isObsecure1,
                               validator: (value) {
@@ -364,13 +398,13 @@ class _RegisterState extends State<Register> {
                             SizedBox(
                               height: 15,
                             ),
-
                             TextFormField(
                                 decoration: InputDecoration(
                                     hintStyle: hintTextStyle(),
                                     fillColor: fieldColor,
                                     filled: true,
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 10),
                                     hintText: "Confirm Password",
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(color: fieldColor),
@@ -390,8 +424,14 @@ class _RegisterState extends State<Register> {
                                           });
                                         },
                                         icon: isObsecure2 == true
-                                            ? Icon(Icons.visibility,color: Colors.black38,)
-                                            : Icon(Icons.visibility_off,color: Colors.black38,))),
+                                            ? Icon(
+                                                Icons.visibility,
+                                                color: Colors.black38,
+                                              )
+                                            : Icon(
+                                                Icons.visibility_off,
+                                                color: Colors.black38,
+                                              ))),
                                 controller: _confirmPasswordController,
                                 obscureText: isObsecure2,
                                 onChanged: (value) {
@@ -416,6 +456,7 @@ class _RegisterState extends State<Register> {
                         customButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+                              getregister();
                               showToastMessage("succesfull");
                             }
                           },
@@ -438,64 +479,53 @@ class _RegisterState extends State<Register> {
 
   var isloading = false;
 
-// getregister() async {
-//   try {
-//     setState(() {
-//       isloading = true;
-//     });
-//
-//     print("Email before sending: ${_emailContoller.text.toString()}");
-//     String url = "${baseUrl}/user/register";
-//     var request = http.MultipartRequest("POST", Uri.parse(url));
-//     request.fields['first']
-//     var map = <String, dynamic>{};
-//     map["name"] = _nameContoller.text.toString();
-//     map['email'] = _emailContoller.text.toString();
-//     map['phone'] = phone.toString();
-//     map['password'] = _passwordContoller.text.toString();
-//     if(picked!= null){
-//       var img = await http.MultipartFile.fromPath("photo", picked!.path);
-//       request.files.add(img);
-//     }else{
-//
-//     }
-//
-//     var response = await http.post(Uri.parse(url), body: map);
-//     var data = jsonDecode(response.body);
-//
-//     print("Request Payload: ${jsonEncode(map)}");
-//     print(response.statusCode);
-//     print(data);
-//     setState(() {
-//       isloading = false;
-//     });
-//     if (response.statusCode == 200) {
-//       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-//       sharedPreferences.setString('email', _emailContoller.text.toString());
-//
-//       String email = _emailContoller.text.toString();
-//       Navigator.push(
-//           context,
-//           MaterialPageRoute(
-//             builder: (context) => VerificationPage(
-//             ),
-//           )).then(
-//             (value) {
-//           setState(() {
-//             _nameContoller.clear();
-//             _emailContoller.clear();
-//             _phoneContoller.clear();
-//             _passwordContoller.clear();
-//           });
-//         },
-//       );
-//     }
-//
-//     setState(() {
-//       isloading = false;
-//     });
-//   } catch (e) {
-//     print("Error: $e");
-//   }
-// }
+getregister() async {
+  try {
+    setState(() {
+      isloading = true;
+    });
+
+    String url = "${baseUrl}/user/register";
+    var request = http.MultipartRequest("POST", Uri.parse(url));
+    request.fields['firstName'] = _firstNameController.text.toString();
+    request.fields['lastName'] = _lastNameController.text.toString();
+    request.fields['email'] = _emailController.text.toString();
+    request.fields['password'] = _passwordController.text.toString();
+    request.fields['address'] = _addressController.text.toString();
+
+    if (picked != null) {
+      var img = await http.MultipartFile.fromPath("file", picked!.path);
+      request.files.add(img);
+    } else {
+      File f = await getImageFileFromAssets('lib/images/user.png');
+      var img = await http.MultipartFile.fromPath('file',f.path);
+      request.files.add(img);
+    }
+
+
+    var response = await request.send();
+    var responseData = await response.stream.toBytes();
+    var responseString = String.fromCharCodes(responseData);
+    var data = jsonDecode(responseString);
+    print("our response is $data");
+    print(data.statusCode);
+
+
+    setState(() {
+      isloading = false;
+    });
+  } catch (e) {
+    print("Error: $e");
+  }
+}
+  Future<File> getImageFileFromAssets(String path) async {
+    final byteData = await rootBundle.load('$path');
+
+    final file = File('${(await getTemporaryDirectory()).path}/$path');
+    await file.create(recursive: true);
+    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+    return file;
+  }
+
 }

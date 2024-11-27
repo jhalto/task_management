@@ -47,6 +47,7 @@ dependencies:
   intl: ^0.19.0
   cached_network_image:
   intl_phone_field:
+  path_provider: ^2.1.5
 
 
 dev_dependencies:
