@@ -42,3 +42,24 @@ class addButton extends StatelessWidget {
     );
   }
 }
+class whiteButton extends StatelessWidget {
+  Widget widget;
+  VoidCallback? onPressed;
+  whiteButton({required this.onPressed,required this.widget});
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return MaterialButton(
+      child: widget,
+      height: 45,
+      minWidth: double.infinity,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5)
+      ),
+      color: fieldColor,
+      onPressed: onPressed,
+
+
+    );
+  }
+}

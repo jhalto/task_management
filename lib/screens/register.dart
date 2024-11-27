@@ -136,7 +136,60 @@ class _RegisterState extends State<Register> {
                                 children: [
                                   IconButton(
                                       onPressed: () {
-                                        pickImageFromCamera();
+                                        showModalBottomSheet(context: context, builder: (context) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+
+                                              gradient: LinearGradient(
+                                                  begin: Alignment.bottomRight,
+
+                                                  colors: [
+                                                fieldColor,Colors.blue.withOpacity(.3)
+
+                                              ]),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 25.0,horizontal: 15),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+
+                                                children: [
+                                                  whiteButton(
+                                                  onPressed: (){
+                                                    pickImageFromCamera();
+                                                    Navigator.pop(context);
+                                                  },
+                                                    widget: Row(
+                                                       mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Icon(Icons.photo_camera),
+                                                        SizedBox(width: 15,),
+                                                        Text("Add image from Camera")
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 15,),
+                                                  whiteButton(
+                                                    onPressed: (){
+                                                      pickImageFromGallery();
+                                                      Navigator.pop(context);
+                                                    },
+                                                    widget: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+
+                                                      children: [
+                                                        Icon(Icons.photo_album_outlined),
+                                                        SizedBox(width: 15,),
+                                                        Text("Add image from Camera")
+                                                      ],
+                                                    ),
+                                                  )
+
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },);
                                       },
                                       icon: Icon(Icons.image)),
                                 ],
@@ -252,7 +305,7 @@ class _RegisterState extends State<Register> {
                                   hintStyle: hintTextStyle(),
                                   filled: true,
                                   fillColor: fieldColor,
-                                  hintText: "password",
+                                  hintText: "Password",
                                   contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: fieldColor),
@@ -318,7 +371,7 @@ class _RegisterState extends State<Register> {
                                     fillColor: fieldColor,
                                     filled: true,
                                     contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                    hintText: "Enter your password",
+                                    hintText: "Confirm Password",
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(color: fieldColor),
                                       borderRadius: BorderRadius.circular(5),
