@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart'as http;
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/api_key/base_url.dart';
 import 'package:task_management/bottom_nav_bar.dart';
@@ -30,63 +31,67 @@ class _VerificationPageState extends State<VerificationPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
+      child: ModalProgressHUD(
+        inAsyncCall: isLoading,
+         progressIndicator: spinkit,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Stack(
 
-          children: [
-            Container(
-              height: 220,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.elliptical(300,130),bottomRight: Radius.elliptical(300,130)),
-                image: DecorationImage(
-                  image: AssetImage('lib/images/bd_calling.png'),
-                  fit: BoxFit.cover,
+            children: [
+              Container(
+                height: 220,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.elliptical(300,130),bottomRight: Radius.elliptical(300,130)),
+                  image: DecorationImage(
+                    image: AssetImage('lib/images/bd_calling.png'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
 
 
-                children: [
-                  SizedBox(height: 180,),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 90,right: 90),
-                    child: Container(
+                  children: [
+                    SizedBox(height: 180,),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 90,right: 90),
+                      child: Container(
 
-                      alignment: Alignment.center,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          color: fieldColor
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Verify OTP',
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        alignment: Alignment.center,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            color: fieldColor
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Verify OTP',
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 50,),
+                    SizedBox(height: 50,),
 
-                  customTextFromField(hintText: "Enter your otp", controller: _otpController),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(onPressed: (){
+                    customTextFromField(hintText: "Enter your otp", controller: _otpController),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(onPressed: (){
 
-                    }, child: Text("Resend Otp",style: myStyle(16,FontWeight.bold),)),
-                  ),
-                  SizedBox(height: 50,),
-                  customButton(text: "Submit", onPressed: () {
-                    verifyEmail();
-                  },)
-                ],
+                      }, child: Text("Resend Otp",style: myStyle(16,FontWeight.bold),)),
+                    ),
+                    SizedBox(height: 50,),
+                    customButton(text: "Submit", onPressed: () {
+                      verifyEmail();
+                    },)
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
