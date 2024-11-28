@@ -7,8 +7,10 @@ class customTextFromField extends StatelessWidget {
   FormFieldValidator? validator;
   TextInputType? inputType;
   Decoration? decoration;
+  Icon? icon;
+  String? lebel;
 customTextFromField({
-  super.key,required this.hintText,required this.controller, this.validator, this.inputType,this.decoration
+  super.key,required this.hintText,this.lebel,required this.controller, this.validator, this.inputType,this.decoration,this.icon
 });
 
 @override
@@ -18,7 +20,11 @@ Widget build(BuildContext context) {
     keyboardType: inputType,
     controller: controller,
     validator: validator,
+
+    textInputAction:  TextInputAction.next,
     decoration: InputDecoration(
+      labelText: lebel,
+      prefixIcon: icon,
         filled: true,
       fillColor: fieldColor,
       hintText: hintText,
@@ -39,8 +45,8 @@ Widget build(BuildContext context) {
 
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          width: 3,
-          color: fieldColor,
+          width: 2.5,
+          color: nil,
 
         ),
         borderRadius: BorderRadius.circular(5),

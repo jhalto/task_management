@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -225,13 +226,14 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                             SizedBox(
-                              height: 10,
+                              height: 20,
                             ),
                             Row(
                               children: [
                                 Expanded(
                                   child: customTextFromField(
                                     hintText: "First Name",
+                                    icon: Icon(FontAwesomeIcons.user,size: 15,),
                                     controller: _firstNameController,
                                     validator: (value) {
                                       if (value!.isEmpty || value == null) {
@@ -250,6 +252,7 @@ class _RegisterState extends State<Register> {
                                 Expanded(
                                   child: customTextFromField(
                                     hintText: "Last Name",
+                                    icon: Icon(FontAwesomeIcons.user,size: 15,),
                                     controller: _lastNameController,
                                     validator: (value) {
                                       if (value!.isEmpty || value == null) {
@@ -268,6 +271,8 @@ class _RegisterState extends State<Register> {
                               height: 15,
                             ),
                             customTextFromField(
+                              
+                              icon: Icon(Icons.email_outlined,size: 18,),
                               hintText: "Email",
                               controller: _emailController,
                               validator: (value) {
@@ -285,42 +290,9 @@ class _RegisterState extends State<Register> {
                             SizedBox(
                               height: 15,
                             ),
-                            // IntlPhoneField(
-                            //   controller: _phoneController,
-                            //   onChanged: (value) {
-                            //     setState(() {
-                            //       phone = value.completeNumber;
-                            //     });
-                            //   },
-                            //   initialCountryCode: 'BD',
-                            //   dropdownTextStyle: TextStyle(
-                            //       color: Colors.black38,
-                            //       fontSize: 16 // Customize text color
-                            //       // Customize font size
-                            //       // Customize font weight
-                            //       ),
-                            //   decoration: InputDecoration(
-                            //     contentPadding:
-                            //         EdgeInsets.symmetric(horizontal: 10),
-                            //     fillColor: fieldColor,
-                            //     filled: true,
-                            //     hintText: "Phone",
-                            //     hintStyle: TextStyle(color: Colors.black26),
-                            //     enabledBorder: OutlineInputBorder(
-                            //       borderSide: BorderSide(
-                            //         color: fieldColor,
-                            //       ),
-                            //       borderRadius: BorderRadius.circular(5),
-                            //     ),
-                            //     focusedBorder: OutlineInputBorder(
-                            //       borderSide: BorderSide(
-                            //         color: fieldColor,
-                            //       ),
-                            //       borderRadius: BorderRadius.circular(5),
-                            //     ),
-                            //   ),
-                            // ),
+
                             customTextFromField(
+                              icon: Icon(Icons.maps_home_work_outlined,size: 18,),
                               hintText: "Address",
                               controller: _addressController,
                             ),
@@ -328,7 +300,10 @@ class _RegisterState extends State<Register> {
                               height: 15,
                             ),
                             TextFormField(
+                              textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
+
+                                  prefixIcon: Icon(Icons.password_outlined,size: 18,),
                                   hintStyle: hintTextStyle(),
                                   filled: true,
                                   fillColor: fieldColor,
@@ -342,7 +317,8 @@ class _RegisterState extends State<Register> {
                                   border: OutlineInputBorder(),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: fieldColor,
+                                      width: 2.5,
+                                      color: nil,
                                     ),
                                     borderRadius: BorderRadius.circular(5),
                                   ),
@@ -399,7 +375,15 @@ class _RegisterState extends State<Register> {
                               height: 15,
                             ),
                             TextFormField(
+                              onEditingComplete: (){
+                                if (_formKey.currentState!.validate()) {
+                                  getregister();
+
+                                }
+                              },
                                 decoration: InputDecoration(
+
+                                    prefixIcon: Icon(Icons.password_outlined,size: 18,),
                                     hintStyle: hintTextStyle(),
                                     fillColor: fieldColor,
                                     filled: true,
@@ -413,7 +397,8 @@ class _RegisterState extends State<Register> {
                                     border: OutlineInputBorder(),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: fieldColor,
+                                        width: 2.5,
+                                        color: nil,
                                       ),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
@@ -438,7 +423,7 @@ class _RegisterState extends State<Register> {
                                   value = value;
                                 },
                                 validator: (value) {
-                                  // Reset error message
+
                                   if (_passwordController.text.toString() !=
                                       _confirmPasswordController.text
                                           .toString()) {
@@ -457,7 +442,7 @@ class _RegisterState extends State<Register> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               getregister();
-                              showToastMessage("succesfull");
+                              showToastMessage("Successful");
                             }
                           },
                           text: "Sign Up",
