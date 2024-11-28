@@ -125,106 +125,97 @@ class _RegisterState extends State<Register> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Center(
-                              child: CircleAvatar(
-                                radius: 80,
-                                backgroundImage: picked != null
-                                    ? FileImage(picked!)
-                                    : AssetImage("lib/images/user.png"),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Center(
-                              child: Column(
+                              child: Stack(
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        builder: (context) {
-                                          return Container(
-                                            height: 200,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              gradient: LinearGradient(
-                                                  begin: Alignment.bottomRight,
-                                                  colors: [
-                                                    fieldColor,
-                                                    Colors.blue.withOpacity(.3)
-                                                  ]),
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  whiteButton(
-                                                    onPressed: () {
-                                                      pickImageFromCamera();
-                                                      Navigator.pop(context);
-                                                    },
-                                                    widget: Row(
-                                                      mainAxisAlignment:MainAxisAlignment.center,
-                                                      children: [
-                                                        Icon(
-                                                            Icons.photo_camera),
-                                                        SizedBox(
-                                                          width: 15,
-                                                        ),
-                                                        Text("Camera")
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  whiteButton(
-                                                    onPressed: () {
-                                                      pickImageFromGallery();
-                                                      Navigator.pop(context);
-                                                    },
-                                                    widget: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.center,
-                                                      children: [
-                                                        Icon(Icons.photo_album_outlined),
-                                                        SizedBox(
-                                                          width: 15,
-                                                        ),
-                                                        Text("Gallery")
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.image),
-                                        Text(
-                                          "Add Image",
-                                          style: myStyle(16, FontWeight.bold),
-                                        )
-                                      ],
+                                  Container(
+                                    child: CircleAvatar(
+                                      radius: 80,
+                                      backgroundImage: picked != null
+                                          ? FileImage(picked!)
+                                          : AssetImage("lib/images/user.png"),
                                     ),
                                   ),
+                                  Positioned(
+                                      bottom: -8,
+                                      right: 10,
+                                      child: IconButton( onPressed: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(8)),
+                                          builder: (context) {
+                                            return Container(
+                                              height: 200,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.circular(5),
+                                                gradient: LinearGradient(
+                                                    begin: Alignment.bottomRight,
+                                                    colors: [
+                                                      fieldColor,
+                                                      Colors.blue.withOpacity(.3)
+                                                    ]),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 15),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: [
+                                                    whiteButton(
+                                                      onPressed: () {
+                                                        pickImageFromCamera();
+                                                        Navigator.pop(context);
+                                                      },
+                                                      widget: Row(
+                                                        mainAxisAlignment:MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                              Icons.photo_camera),
+                                                          SizedBox(
+                                                            width: 15,
+                                                          ),
+                                                          Text("Camera")
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    whiteButton(
+                                                      onPressed: () {
+                                                        pickImageFromGallery();
+                                                        Navigator.pop(context);
+                                                      },
+                                                      widget: Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(Icons.photo_album_outlined),
+                                                          SizedBox(
+                                                            width: 15,
+                                                          ),
+                                                          Text("Gallery")
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                          icon: Icon(Icons.photo_camera,)
+                                      )
+                                  )
                                 ],
                               ),
                             ),
+
                             SizedBox(
                               height: 20,
                             ),

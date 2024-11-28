@@ -12,6 +12,7 @@ import 'package:task_management/widgets/custom_colors.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_from_field.dart';
 import '../widgets/custom_widgets.dart';
+import 'login.dart';
 
 
 class VerificationPage extends StatefulWidget {
@@ -124,7 +125,7 @@ class _VerificationPageState extends State<VerificationPage> {
       print("Response body: $data");
       if (response.statusCode == 200) {
         showToastMessage("Account Activated Successfully");
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavBar()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
       } else {
       showToastMessage("Activation failed");
       }

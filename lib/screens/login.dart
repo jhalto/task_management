@@ -29,10 +29,7 @@ class _LoginState extends State<Login> {
   bool isObsecure = true;
   final _formKey = GlobalKey<FormState>();
   @override
-  void initState() {
-    islogin();
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +113,7 @@ class _LoginState extends State<Login> {
                           TextFormField(
                             onEditingComplete: (){
                               if(_formKey.currentState!.validate()){
-                                // getLogin();
+                                getLogin();
 
                               }
                             },
@@ -226,18 +223,11 @@ class _LoginState extends State<Login> {
           ),
         ),
       ),
-
     );
   }
 
   var isLoading = false;
-  islogin()async{
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var token = sharedPreferences.getString('token');
-    if(token!= null){
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomNavBar(),), (route) => false,);
-    }
-  }
+
   Future<void> getLogin() async {
     try {
       setState(() {
@@ -268,7 +258,9 @@ class _LoginState extends State<Login> {
 
       print("Response status: ${response.statusCode}");
       print("Response body: ${data}");
-
+        if(response.statusCode== 404){
+          showToastMessage("User Not Found");
+        }
       if (response.statusCode == 200) {
         SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
         sharedPreferences.setString("token", data['data']['token']);
@@ -277,8 +269,8 @@ class _LoginState extends State<Login> {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavBar()),);
       } else {
 
-
       }
+
     } catch (e) {
       print("Something went wrong $e");
       showToastMessage("An error occurred: $e");
