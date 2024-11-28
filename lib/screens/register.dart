@@ -29,7 +29,7 @@ class _RegisterState extends State<Register> {
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
+
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -232,6 +232,7 @@ class _RegisterState extends State<Register> {
                               children: [
                                 Expanded(
                                   child: customTextFromField(
+                                    inputType: TextInputType.name,
                                     hintText: "First Name",
                                     icon: Icon(FontAwesomeIcons.user,size: 15,),
                                     controller: _firstNameController,
@@ -251,6 +252,7 @@ class _RegisterState extends State<Register> {
                                 ),
                                 Expanded(
                                   child: customTextFromField(
+                                    inputType: TextInputType.name,
                                     hintText: "Last Name",
                                     icon: Icon(FontAwesomeIcons.user,size: 15,),
                                     controller: _lastNameController,
@@ -271,7 +273,7 @@ class _RegisterState extends State<Register> {
                               height: 15,
                             ),
                             customTextFromField(
-                              
+                              inputType: TextInputType.streetAddress,
                               icon: Icon(Icons.email_outlined,size: 18,),
                               hintText: "Email",
                               controller: _emailController,
@@ -377,7 +379,7 @@ class _RegisterState extends State<Register> {
                             TextFormField(
                               onEditingComplete: (){
                                 if (_formKey.currentState!.validate()) {
-                                  getregister();
+                                  getRegister();
 
                                 }
                               },
@@ -441,8 +443,7 @@ class _RegisterState extends State<Register> {
                         customButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              getregister();
-                              showToastMessage("Successful");
+                              getRegister();
                             }
                           },
                           text: "Sign Up",
@@ -464,7 +465,7 @@ class _RegisterState extends State<Register> {
 
   var isloading = false;
 
-getregister() async {
+getRegister() async {
   try {
     setState(() {
       isloading = true;
@@ -487,15 +488,25 @@ getregister() async {
       request.files.add(img);
     }
 
-
     var response = await request.send();
     var responseData = await response.stream.toBytes();
     var responseString = String.fromCharCodes(responseData);
     var data = jsonDecode(responseString);
     print("our response is $data");
-    print(data.statusCode);
-
-
+    print("Response code ${response.statusCode}");
+     if(data['status'].toString().startsWith("Success")){
+       showToastMessage("Successfully Registered. A verification code has been sent to email. Please Verify");
+       Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationPage(
+         email: _emailController.text.toString(),
+       ),));
+     }
+    if (data['error'] != null && data['error'].toString().startsWith("E11000")) {
+      showToastMessage("Already Registered. A verification code has been sent to email. Please Verify");
+       Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationPage(
+         email: _emailController.text.toString(),
+       ),));
+      // Add your handling logic here
+    }
     setState(() {
       isloading = false;
     });

@@ -22,8 +22,11 @@ Widget build(BuildContext context) {
     validator: validator,
 
     textInputAction:  TextInputAction.next,
+
     decoration: InputDecoration(
+
       labelText: lebel,
+
       prefixIcon: icon,
         filled: true,
       fillColor: fieldColor,

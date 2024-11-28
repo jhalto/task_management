@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_management/bottom_nav_bar.dart';
 import 'package:task_management/screens/register.dart';
 
 void main() {
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Register(),
+      home: BottomNavBar(),
     );
   }
 }
