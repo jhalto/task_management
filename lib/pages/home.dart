@@ -4,6 +4,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/api_key/base_url.dart';
 import 'package:task_management/custom_http/custum_http_request.dart';
+import 'package:task_management/screens/drawer_design.dart';
 import 'package:task_management/screens/login.dart';
 import 'package:task_management/widgets/custom_button.dart';
 import 'package:task_management/widgets/custom_colors.dart';
@@ -39,9 +40,11 @@ class _HomeState extends State<Home> {
         Uri.parse(url),
         headers: await CustomHttpRequest.getHeaderWithToken(),
       );
-
+      var data = jsonDecode(response.body);
+      print(data);
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
+
         setState(() {
           tasklist = data['data']['myTasks'];
         });
@@ -62,32 +65,7 @@ class _HomeState extends State<Home> {
     return AdvancedDrawer(
       backdropColor: caya,
       controller: _advancedDrawerController,
-      drawer: Drawer(
-        backgroundColor: maya.withOpacity(0.8),
-        child: Column(
-          children: [
-            const DrawerHeader(
-              child: UserAccountsDrawerHeader(
-                accountName: Text("John Doe"),
-                accountEmail: Text("johndoe@example.com"),
-              ),
-            ),
-            customButton(
-              text: "Log Out",
-              onPressed: () async {
-                SharedPreferences sharedPreferences =
-                await SharedPreferences.getInstance();
-                sharedPreferences.remove("token");
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Login()),
-                      (route) => false,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: DrawerDesign(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text("BdCalling"),

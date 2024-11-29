@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -29,7 +30,6 @@ class _RegisterState extends State<Register> {
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -456,62 +456,94 @@ class _RegisterState extends State<Register> {
 
   var isloading = false;
 
-getRegister() async {
-  try {
-    setState(() {
-      isloading = true;
-    });
+  Future<void> getRegister() async {
+    try {
+      setState(() {
+        isloading = true;
+      });
 
-    String url = "${baseUrl}/user/register";
-    var request = http.MultipartRequest("POST", Uri.parse(url));
-    request.fields['firstName'] = _firstNameController.text.toString();
-    request.fields['lastName'] = _lastNameController.text.toString();
-    request.fields['email'] = _emailController.text.toString();
-    request.fields['password'] = _passwordController.text.toString();
-    request.fields['address'] = _addressController.text.toString();
+      String url = "${baseUrl}/user/register";
+      var request = http.MultipartRequest("POST", Uri.parse(url));
+      request.fields['firstName'] = _firstNameController.text.trim();
+      request.fields['lastName'] = _lastNameController.text.trim();
+      request.fields['email'] = _emailController.text.trim();
+      request.fields['password'] = _passwordController.text.trim();
+      request.fields['address'] = _addressController.text.trim();
 
-    if (picked != null) {
-      var img = await http.MultipartFile.fromPath("file", picked!.path);
-      request.files.add(img);
-    } else {
-      File f = await getImageFileFromAssets('lib/images/user.png');
-      var img = await http.MultipartFile.fromPath('file',f.path);
-      request.files.add(img);
+      // Add file
+      if (picked != null) {
+        var img = await http.MultipartFile.fromPath(
+          "file",
+          picked!.path,
+          contentType: MediaType('image', 'jpeg'),
+        );
+        request.files.add(img);
+      } else {
+        File defaultImage = await getImageFileFromAssets('lib/images/user.png');
+        var img = await http.MultipartFile.fromPath(
+          "file",
+          defaultImage.path,
+          contentType: MediaType('image', 'png'), // Adjust as needed
+        );
+        request.files.add(img);
+      }
+
+      // Send request
+      var response = await request.send();
+      var responseData = await response.stream.toBytes();
+      var responseString = String.fromCharCodes(responseData);
+
+      print("Response Body: $responseString");
+      print("Response Code: ${response.statusCode}");
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        var data = jsonDecode(responseString);
+
+        if (data['status']?.toString().startsWith("Success") ?? false) {
+          showToastMessage(
+            "Successfully Registered. A verification code has been sent to email. Please Verify",
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VerificationPage(
+                email: _emailController.text.trim(),
+              ),
+            ),
+          );
+        } else if (data['error']?.toString().startsWith("E11000") ?? false) {
+          showToastMessage(
+            "Already Registered. A verification code has been sent to email. Please Verify",
+          );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VerificationPage(
+                email: _emailController.text.trim(),
+              ),
+            ),
+          );
+        }
+      } else {
+        // Handle unexpected response
+        print("Unexpected response: ${response.statusCode}");
+        showToastMessage("Server error: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error: $e");
+      showToastMessage("An error occurred. Please try again later.");
+    } finally {
+      setState(() {
+        isloading = false;
+      });
     }
-
-    var response = await request.send();
-    var responseData = await response.stream.toBytes();
-    var responseString = String.fromCharCodes(responseData);
-    var data = jsonDecode(responseString);
-    print("our response is $data");
-    print("Response code ${response.statusCode}");
-     if(data['status'].toString().startsWith("Success")){
-       showToastMessage("Successfully Registered. A verification code has been sent to email. Please Verify");
-       Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationPage(
-         email: _emailController.text.toString(),
-       ),));
-     }
-    if (data['error'] != null && data['error'].toString().startsWith("E11000")) {
-      showToastMessage("Already Registered. A verification code has been sent to email. Please Verify");
-       Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationPage(
-         email: _emailController.text.toString(),
-       ),));
-      // Add your handling logic here
-    }
-    setState(() {
-      isloading = false;
-    });
-  } catch (e) {
-    print("Error: $e");
   }
-}
+
   Future<File> getImageFileFromAssets(String path) async {
     final byteData = await rootBundle.load('$path');
-
     final file = File('${(await getTemporaryDirectory()).path}/$path');
     await file.create(recursive: true);
     await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-
     return file;
   }
 

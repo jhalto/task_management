@@ -106,7 +106,7 @@ class _ProfileState extends State<Profile> {
                   ),
                     CircleAvatar(
                       radius: 80,
-                      backgroundImage: AssetImage("lib/images/user.png"),
+                      backgroundImage: NetworkImage("${baseUrl}/${image}"),
                     ),
                   Text(name!,style: titleBold(),),
                   Text(email!),
@@ -124,13 +124,16 @@ class _ProfileState extends State<Profile> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 100),
                     child: customButton(text: "Edit Profile",
-                        onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(
+                        onPressed: () async{
+                      final updated = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(
                         firstName: firstName.toString(),
                         lastName: lastName.toString(),
 
                         address: address.toString(),
                       )));
+                      if (updated == true) {
+                        getUserData(); // Refresh the profile data
+                      }
                         }),
                   )
                 ],

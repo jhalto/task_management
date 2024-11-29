@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -304,7 +305,7 @@ class _EditProfileState extends State<EditProfile> {
                               updateProfile();
                             }
                           },
-                          text: "Sign Up",
+                          text: "Update",
                         ),
                         SizedBox(
                           height: 300,
@@ -337,11 +338,19 @@ class _EditProfileState extends State<EditProfile> {
       request.fields['address'] = _addressController!.text.trim();
 
       if (picked != null) {
-        var img = await http.MultipartFile.fromPath("file", picked!.path);
+        var img = await http.MultipartFile.fromPath(
+          "file",
+          picked!.path,
+          contentType: MediaType('image', 'jpeg'),
+        );
         request.files.add(img);
       } else {
-        File f = await getImageFileFromAssets('lib/images/user.png');
-        var img = await http.MultipartFile.fromPath('file',f.path);
+        File defaultImage = await getImageFileFromAssets('lib/images/user.png');
+        var img = await http.MultipartFile.fromPath(
+          "file",
+          defaultImage.path,
+          contentType: MediaType('image', 'png'), // Adjust as needed
+        );
         request.files.add(img);
       }
 
@@ -353,7 +362,7 @@ class _EditProfileState extends State<EditProfile> {
       print("Response code ${response.statusCode}");
       if(response.statusCode == 200 ){
         showToastMessage("Update Successful");
-        Navigator.pop(context);
+        Navigator.pop(context,true);
 
       }else{
         showToastMessage("Update Not Successful");

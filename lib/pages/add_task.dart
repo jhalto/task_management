@@ -21,44 +21,51 @@ class _AddTaskState extends State<AddTask> {
   TextEditingController descriptionController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text("Add Task",style: titleBold(),),
-          centerTitle: true,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Title",style: bodyBold(),),
-              Container(
-                child: TextField(
-                  controller: titleController,
-                  maxLines: 2,
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Text("Description",style: bodyBold(),),
-              SizedBox(height: 20),
-              Container(
-                child: TextField(
-                  controller: descriptionController,
-                  maxLines: 5,
-                ),
-              ),
-              SizedBox(height: 40,),
-              customButton(text: "Save",
-                  onPressed: (){
-                   createTask();
-                  })
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            title: Text("Add Task",style: titleBold(),),
+            centerTitle: true,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Title",style: bodyBold(),),
+                  Container(
+                    child: TextField(
+                      controller: titleController,
+                      maxLines: 2,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text("Description",style: bodyBold(),),
+                  SizedBox(height: 20),
+                  Container(
+                    child: TextField(
+                      controller: descriptionController,
+                      maxLines: 5,
+                    ),
+                  ),
+                  SizedBox(height: 40,),
+                  customButton(text: "Save",
+                      onPressed: (){
+                       createTask();
+                      })
 
-            ],
+                ],
+              ),
+            ),
           ),
         ),
       ),

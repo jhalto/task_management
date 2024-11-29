@@ -1,1 +1,1 @@
-final String baseUrl = "http://139.59.65.225:8052";
+final String baseUrl = "http://206.189.138.45:8052";
