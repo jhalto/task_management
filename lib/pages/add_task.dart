@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:task_management/api_key/base_url.dart';
+import 'package:task_management/bottom_nav_bar.dart';
 import 'package:task_management/custom_http/custum_http_request.dart';
 import 'package:task_management/pages/home.dart';
 import 'package:task_management/widgets/custom_button.dart';
@@ -90,7 +91,7 @@ class _AddTaskState extends State<AddTask> {
       print(response.statusCode);
       if(response.statusCode == 200){
         showToastMessage("Task Created");
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home(),));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavBar(),));
       }
       setState(() {
         isLoading = false;

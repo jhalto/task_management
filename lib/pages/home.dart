@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:task_management/api_key/base_url.dart';
 import 'package:task_management/custom_http/custum_http_request.dart';
 import 'package:task_management/screens/drawer_design.dart';
-import 'package:task_management/screens/login.dart';
-import 'package:task_management/widgets/custom_button.dart';
+
+import 'package:task_management/screens/view_task.dart';
+
 import 'package:task_management/widgets/custom_colors.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import '../widgets/custom_widgets.dart';
@@ -32,31 +32,40 @@ class _HomeState extends State<Home> {
 
   Future<void> getAllTask() async {
     try {
-      setState(() {
-        isLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
+
       String url = "${baseUrl}/task/get-all-task";
       var response = await http.get(
         Uri.parse(url),
         headers: await CustomHttpRequest.getHeaderWithToken(),
       );
       var data = jsonDecode(response.body);
-      print(data);
-      print(response.statusCode);
-      if (response.statusCode == 200) {
 
-        setState(() {
-          tasklist = data['data']['myTasks'];
-        });
+      if (response.statusCode == 200) {
+        if (mounted) {
+          setState(() {
+            tasklist = data['data']['myTasks'];
+          });
+        }
       } else {
-        showToastMessage("Failed to load tasks");
+        if (mounted) {
+          showToastMessage("Failed to load tasks");
+        }
       }
     } catch (e) {
-      print("Error fetching tasks: $e");
+      if (mounted) {
+        print("Error fetching tasks: $e");
+      }
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -68,16 +77,15 @@ class _HomeState extends State<Home> {
       drawer: DrawerDesign(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("BdCalling"),
+          title: const Text("All Task"),
+          backgroundColor: nil,
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.menu),
             onPressed: _advancedDrawerController.showDrawer,
           ),
         ),
-        body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : tasklist.isEmpty
+        body: tasklist.isEmpty
             ? const Center(child: Text("No tasks available"))
             : Padding(
           padding: const EdgeInsets.all(8.0),
@@ -92,8 +100,11 @@ class _HomeState extends State<Home> {
             itemBuilder: (context, index) {
               final task = tasklist[index];
               return GestureDetector(
-                onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => ,))
+                onTap: () async{
+                 var refresh = await Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ViewTask(id: task['_id'].toString())));
+                 if(refresh == true){
+                   getAllTask();
+                 }
                 },
                 child: Card(
                   elevation: 4,

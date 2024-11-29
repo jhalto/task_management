@@ -1,7 +1,6 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task_management/pages/home.dart';
 import 'package:task_management/pages/profile.dart';
 import 'package:task_management/pages/add_task.dart';
@@ -40,11 +39,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 child: Container(
                   child: Icon(
                     Icons.add,
-                    color: Colors.white,
+                    color: nil,
                   ),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(width: 3, color: Colors.white)
+                      border: Border.all(width: 3, color: nil)
                   ),
                 ),
                 backgroundColor: fieldColor,
