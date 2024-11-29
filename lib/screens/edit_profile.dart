@@ -19,10 +19,10 @@ import '../widgets/custom_text_from_field.dart';
 import '../widgets/custom_widgets.dart';
 
 class EditProfile extends StatefulWidget {
-  EditProfile({super.key, required this.firstName,required this.lastName ,required this.address});
+  EditProfile({super.key, required this.firstName,required this.lastName ,required this.address, required this.image});
   String? firstName;
   String? lastName;
-
+  String? image;
   String? address;
 
   @override
@@ -34,6 +34,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController? _firstNameController;
   TextEditingController? _lastNameController;
   TextEditingController? _addressController;
+  String? img;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _EditProfileState extends State<EditProfile> {
     _firstNameController = TextEditingController(text: widget.firstName);
     _lastNameController = TextEditingController(text: widget.lastName);
     _addressController = TextEditingController(text: widget.address);
+    img = widget.image;
   }
   final _formKey = GlobalKey<FormState>();
   bool isObsecure1 = true;
@@ -140,7 +142,7 @@ class _EditProfileState extends State<EditProfile> {
                                       radius: 80,
                                       backgroundImage: picked != null
                                           ? FileImage(picked!)
-                                          : AssetImage("lib/images/user.png"),
+                                          : NetworkImage("${baseUrl}/${img}"),
                                     ),
                                   ),
                                   Positioned(

@@ -10,6 +10,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/api_key/base_url.dart';
+import 'package:task_management/custom_http/custum_http_request.dart';
 import 'package:task_management/widgets/custom_button.dart';
 
 import '../screens/edit_profile.dart';
@@ -45,13 +46,9 @@ class _ProfileState extends State<Profile> {
       String url = "${baseUrl}/user/my-profile";
 
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-      var token = sharedPreferences.getString('token');
-      var headers =<String,String>{};
-      headers['Authorization'] = "Bearer $token";
-      headers['Content-Type'] = "application/json; charset=utf-8";
-      headers['Accept'] = "application/json";
 
-      var response = await http.get(Uri.parse(url),headers: headers);
+
+      var response = await http.get(Uri.parse(url),headers: await CustomHttpRequest.getHeaderWithToken());
       var data = jsonDecode(response.body);
 
       print(data);
@@ -78,69 +75,71 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: name!=null?Stack(
-          children: [
-            Container(
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                      child: Container(
-                        color: fieldColor.withOpacity(.8),
-                      )
-                  ),
-                  Expanded(
-                    flex: 2,
-                      child: Container(
-                        color: Colors.black12.withOpacity(.1),
-                      )
-                  ),
-                ],
-              ),
-            ),
-            Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 150,
-                  ),
-                    CircleAvatar(
-                      radius: 80,
-                      backgroundImage: NetworkImage("${baseUrl}/${image}"),
+        body: name!=null?SingleChildScrollView(
+          child: Stack(
+            children: [
+              Container(
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                        child: Container(
+                          color: fieldColor.withOpacity(.8),
+                        )
                     ),
-                  Text(name!,style: titleBold(),),
-                  Text(email!),
-                  SizedBox(height: 5,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(CupertinoIcons.location_solid),
-                      SizedBox(width: 5,),
-                      Text(address!,style: myStyle(16),),
-
-                    ],
-                  ),
-                  SizedBox(height: 50,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 100),
-                    child: customButton(text: "Edit Profile",
-                        onPressed: () async{
-                      final updated = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(
-                        firstName: firstName.toString(),
-                        lastName: lastName.toString(),
-
-                        address: address.toString(),
-                      )));
-                      if (updated == true) {
-                        getUserData(); // Refresh the profile data
-                      }
-                        }),
-                  )
-                ],
+                    Expanded(
+                      flex: 2,
+                        child: Container(
+                          color: Colors.black12.withOpacity(.1),
+                        )
+                    ),
+                  ],
+                ),
               ),
-            ),
-
-          ],
+              Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 150,
+                    ),
+                      CircleAvatar(
+                        radius: 80,
+                        backgroundImage: NetworkImage("${baseUrl}/${image}"),
+                      ),
+                    Text(name!,style: titleBold(),),
+                    Text(email!),
+                    SizedBox(height: 5,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(CupertinoIcons.location_solid),
+                        SizedBox(width: 5,),
+                        Text(address!,style: myStyle(16),),
+          
+                      ],
+                    ),
+                    SizedBox(height: 50,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 100),
+                      child: customButton(text: "Edit Profile",
+                          onPressed: () async{
+                        final updated = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(
+                          firstName: firstName.toString(),
+                          lastName: lastName.toString(),
+                          image: image.toString(),
+                          address: address.toString(),
+                        )));
+                        if (updated == true) {
+                          getUserData(); // Refresh the profile data
+                        }
+                          }),
+                    )
+                  ],
+                ),
+              ),
+          
+            ],
+          ),
         ):spinkit
     );
   }
