@@ -1,14 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'package:http_parser/http_parser.dart';
 
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:task_management/api_key/base_url.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +13,6 @@ import 'package:task_management/custom_http/custum_http_request.dart';
 import 'package:task_management/widgets/custom_button.dart';
 
 import '../widgets/custom_colors.dart';
-import '../widgets/custom_text_from_field.dart';
 import '../widgets/custom_widgets.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -117,6 +112,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       if (!value.contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
                         return '• Special character is missing.\n';
                       }
+                      return null;
                     },
                   ),
                   SizedBox(height: 20,),

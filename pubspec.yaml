@@ -53,6 +53,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.1
 
 
+  http: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

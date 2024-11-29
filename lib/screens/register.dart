@@ -6,10 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/api_key/base_url.dart';
 import 'package:http/http.dart' as http;
 import 'package:task_management/screens/verification_page.dart';
@@ -278,6 +276,7 @@ class _RegisterState extends State<Register> {
                                 if (!value.contains("@")) {
                                   return "Invalid email";
                                 }
+                                return null;
                               },
                             ),
                             SizedBox(
@@ -360,6 +359,7 @@ class _RegisterState extends State<Register> {
                                     RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
                                   return '• Special character is missing.\n';
                                 }
+                                return null;
 
                                 // Return null if the password is valid, otherwise return the error message
                               },
@@ -422,6 +422,7 @@ class _RegisterState extends State<Register> {
                                           .toString()) {
                                     return "Password doesn't match";
                                   }
+                                  return null;
                                 }),
                             SizedBox(
                               height: 5,

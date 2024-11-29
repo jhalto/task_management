@@ -13,7 +13,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:task_management/api_key/base_url.dart';
 import 'package:http/http.dart' as http;
 import 'package:task_management/custom_http/custum_http_request.dart';
-import '../bottom_nav_bar.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_colors.dart';
 import '../widgets/custom_text_from_field.dart';

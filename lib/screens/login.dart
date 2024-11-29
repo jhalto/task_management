@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import 'package:http/http.dart' as http;
@@ -105,6 +104,7 @@ class _LoginState extends State<Login> {
                                 if (!value.contains("@")) {
                                   return "Invalid email";
                                 }
+                                return null;
                               },
                           ),
                           
@@ -175,6 +175,7 @@ class _LoginState extends State<Login> {
                               if (!value.contains(RegExp(r'[!@#%^&*(),.?":{}|<>]'))) {
                                 return '• Special character is missing.\n';
                               }
+                              return null;
                             },
                           ),
                           Align(
