@@ -14,6 +14,16 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+var isLoading = false;
+  getAllTask()async{
+    try{
+
+    }catch(e){
+
+
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +83,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-           
+
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 15),

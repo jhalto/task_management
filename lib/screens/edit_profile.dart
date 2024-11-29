@@ -5,30 +5,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:task_management/api_key/base_url.dart';
 import 'package:http/http.dart' as http;
-import 'package:task_management/screens/verification_page.dart';
+import 'package:task_management/custom_http/custum_http_request.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_colors.dart';
 import '../widgets/custom_text_from_field.dart';
 import '../widgets/custom_widgets.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  EditProfile({super.key, required this.firstName,required this.lastName ,required this.address});
+  String? firstName;
+  String? lastName;
+
+  String? address;
 
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _lastNameController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
+
+  TextEditingController? _firstNameController;
+  TextEditingController? _lastNameController;
+  TextEditingController? _addressController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _firstNameController = TextEditingController(text: widget.firstName);
+    _lastNameController = TextEditingController(text: widget.lastName);
+    _addressController = TextEditingController(text: widget.address);
+  }
   final _formKey = GlobalKey<FormState>();
   bool isObsecure1 = true;
   bool isObsecure2 = true;
@@ -63,7 +76,7 @@ class _EditProfileState extends State<EditProfile> {
       inAsyncCall: isloading,
       progressIndicator: spinkit,
       child: SafeArea(
-        child: Scaffold(
+        child: widget.address!=null?Scaffold(
           resizeToAvoidBottomInset: false,
           body: SingleChildScrollView(
             child: Stack(
@@ -222,7 +235,7 @@ class _EditProfileState extends State<EditProfile> {
                                     inputType: TextInputType.name,
                                     hintText: "First Name",
                                     icon: Icon(FontAwesomeIcons.user,size: 15,),
-                                    controller: _firstNameController,
+                                    controller: _firstNameController!,
                                     validator: (value) {
                                       if (value!.isEmpty || value == null) {
                                         return "name can't be empty";
@@ -242,7 +255,7 @@ class _EditProfileState extends State<EditProfile> {
                                     inputType: TextInputType.name,
                                     hintText: "Last Name",
                                     icon: Icon(FontAwesomeIcons.user,size: 15,),
-                                    controller: _lastNameController,
+                                    controller: _lastNameController!,
                                     validator: (value) {
                                       if (value!.isEmpty || value == null) {
                                         return "name can't be empty";
@@ -259,23 +272,7 @@ class _EditProfileState extends State<EditProfile> {
                             SizedBox(
                               height: 15,
                             ),
-                            customTextFromField(
-                              inputType: TextInputType.streetAddress,
-                              icon: Icon(Icons.email_outlined,size: 18,),
-                              hintText: "Email",
-                              controller: _emailController,
-                              validator: (value) {
-                                if (value!.isEmpty || value == null) {
-                                  return "email can't be null";
-                                }
-                                if (value.length < 5) {
-                                  return "Invalid email";
-                                }
-                                if (!value.contains("@")) {
-                                  return "Invalid email";
-                                }
-                              },
-                            ),
+
                             SizedBox(
                               height: 15,
                             ),
@@ -283,7 +280,7 @@ class _EditProfileState extends State<EditProfile> {
                             customTextFromField(
                               icon: Icon(Icons.maps_home_work_outlined,size: 18,),
                               hintText: "Address",
-                              controller: _addressController,
+                              controller: _addressController!,
                             ),
                             SizedBox(
                               height: 15,
@@ -319,7 +316,7 @@ class _EditProfileState extends State<EditProfile> {
               ],
             ),
           ),
-        ),
+        ):spinkit,
       ),
     );
   }
@@ -334,12 +331,10 @@ class _EditProfileState extends State<EditProfile> {
 
       String url = "${baseUrl}/user/update-profile";
       var request = http.MultipartRequest("PATCH", Uri.parse(url));
-      request.headers.addAll(request.fields);
-      request.fields['firstName'] = _firstNameController.text.toString();
-      request.fields['lastName'] = _lastNameController.text.toString();
-      request.fields['email'] = _emailController.text.toString();
-
-      request.fields['address'] = _addressController.text.toString();
+      request.headers.addAll(await CustomHttpRequest.getHeaderWithToken());
+      request.fields['firstName'] = _firstNameController!.text.trim();
+      request.fields['lastName'] = _lastNameController!.text.trim();
+      request.fields['address'] = _addressController!.text.trim();
 
       if (picked != null) {
         var img = await http.MultipartFile.fromPath("file", picked!.path);
@@ -356,19 +351,15 @@ class _EditProfileState extends State<EditProfile> {
       var data = jsonDecode(responseString);
       print("our response is $data");
       print("Response code ${response.statusCode}");
-      if(data['status'].toString().startsWith("Success")){
-        showToastMessage("Successfully Registered. A verification code has been sent to email. Please Verify");
-        Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationPage(
-          email: _emailController.text.toString(),
-        ),));
+      if(response.statusCode == 200 ){
+        showToastMessage("Update Successful");
+        Navigator.pop(context);
+
+      }else{
+        showToastMessage("Update Not Successful");
       }
-      if (data['error'] != null && data['error'].toString().startsWith("E11000")) {
-        showToastMessage("Already Registered. A verification code has been sent to email. Please Verify");
-        Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationPage(
-          email: _emailController.text.toString(),
-        ),));
-        // Add your handling logic here
-      }
+
+
       setState(() {
         isloading = false;
       });

@@ -125,7 +125,12 @@ class _ProfileState extends State<Profile> {
                     padding: const EdgeInsets.symmetric(horizontal: 100),
                     child: customButton(text: "Edit Profile",
                         onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(
+                        firstName: firstName.toString(),
+                        lastName: lastName.toString(),
+
+                        address: address.toString(),
+                      )));
                         }),
                   )
                 ],
@@ -138,17 +143,4 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-Container tapContainer(String text, Icon icon) {
-  return Container(
-    height: 60,
-    decoration:
-    BoxDecoration(color: maya, borderRadius: BorderRadius.circular(5)),
-    child: Center(
-      child: ListTile(
-        leading: icon,
-        title: Text(text),
-        trailing: Icon(CupertinoIcons.arrow_right_circle),
-      ),
-    ),
-  );
-}
+

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:task_management/pages/home.dart';
 import 'package:task_management/pages/profile.dart';
-import 'package:task_management/pages/task.dart';
+import 'package:task_management/pages/add_task.dart';
 
 import 'widgets/custom_colors.dart';
 
@@ -18,7 +18,7 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   List<Widget> pages = [
     Home(),
-    Task(),
+    AddTask(),
     Profile(),
   ];
   int currentIndex = 0;
