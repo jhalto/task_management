@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:task_management/bottom_nav_bar.dart';
 import 'package:task_management/pages/home.dart';
+import 'package:task_management/screens/change_password.dart';
 import 'package:task_management/widgets/custom_widgets.dart';
 import '../api_key/base_url.dart';
 import '../custom_http/custum_http_request.dart';
@@ -116,13 +117,13 @@ class _DrawerDesignState extends State<DrawerDesign> {
 
                   leading: const Icon(Icons.home, color: Colors.white),
                   title: const Text(
-                    "Home",
+                    "Change Password",
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   onTap: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => BottomNavBar()),
+                      MaterialPageRoute(builder: (context) => ChangePassword()),
                     );
                   },
                 ),

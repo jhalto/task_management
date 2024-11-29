@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:task_management/api_key/base_url.dart';
 import 'package:task_management/bottom_nav_bar.dart';
 import 'package:task_management/custom_http/custum_http_request.dart';
@@ -9,6 +10,8 @@ import 'package:task_management/widgets/custom_button.dart';
 import 'package:task_management/widgets/custom_colors.dart';
 import 'package:task_management/widgets/custom_widgets.dart';
 import 'package:http/http.dart'as http;
+
+import '../screens/drawer_design.dart';
 
 class AddTask extends StatefulWidget {
   const AddTask({super.key});
@@ -20,19 +23,28 @@ class AddTask extends StatefulWidget {
 class _AddTaskState extends State<AddTask> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  final _advancedDrawerController = AdvancedDrawerController();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: SafeArea(
+      child: AdvancedDrawer(
+        backdropColor: caya,
+        controller: _advancedDrawerController,
+        drawer: DrawerDesign(),
         child: Scaffold(
           resizeToAvoidBottomInset: true,
+
           appBar: AppBar(
-            backgroundColor: Colors.white,
-            title: Text("Add Task",style: titleBold(),),
+            title: const Text("All Task"),
+            backgroundColor: nil,
             centerTitle: true,
+            leading: IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: _advancedDrawerController.showDrawer,
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
