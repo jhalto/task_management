@@ -113,30 +113,25 @@ class _DrawerDesignState extends State<DrawerDesign> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.person, color: Colors.white),
+
+                  leading: const Icon(Icons.home, color: Colors.white),
                   title: const Text(
-                    "Profile",
+                    "Home",
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   onTap: () {
-                    // Navigate to Profile
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => BottomNavBar()),
+                    );
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.settings, color: Colors.white),
-                  title: const Text(
-                    "Settings",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  onTap: () {
-                    // Navigate to Settings
-                  },
-                ),
+
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(left: 20,right: 20, bottom:  50),
             child: customButton(
               text: "Log Out",
               onPressed: () async {

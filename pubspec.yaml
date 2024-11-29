@@ -50,11 +50,21 @@ dependencies:
   path_provider: ^2.1.5
   flutter_advanced_drawer: ^1.3.7
   http_parser:
+  flutter_launcher_icons: ^0.14.1
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.1
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/images/sahayagi.png"
+  remove_alpha_ios: true
+  min_sdk_android: 21
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "lib/images/sahayagi.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

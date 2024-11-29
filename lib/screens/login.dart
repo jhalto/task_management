@@ -97,7 +97,7 @@ class _LoginState extends State<Login> {
                               controller: emailController,
                               validator: (value) {
                                 if (value!.isEmpty || value == null) {
-                                  return "email can't be null";
+                                  return "Email is Required";
                                 }
                                 if (value.length < 5) {
                                   return "Invalid email";
@@ -120,7 +120,7 @@ class _LoginState extends State<Login> {
                             decoration: InputDecoration(
                                 hintStyle: hintTextStyle(),
                                 hintText: "Password",
-                                prefixIcon: Icon(Icons.password_outlined),
+                                prefixIcon: Icon(Icons.password_outlined,size: 18,),
                                 filled: true,
                                 fillColor: fieldColor,
                                 contentPadding: EdgeInsets.symmetric(horizontal: 10),

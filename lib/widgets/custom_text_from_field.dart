@@ -8,9 +8,8 @@ class customTextFromField extends StatelessWidget {
   TextInputType? inputType;
   Decoration? decoration;
   Icon? icon;
-  String? lebel;
 customTextFromField({
-  super.key,required this.hintText,this.lebel,required this.controller, this.validator, this.inputType,this.decoration,this.icon
+  super.key,required this.hintText,required this.controller, this.validator, this.inputType,this.decoration,this.icon
 });
 
 @override
@@ -25,15 +24,14 @@ Widget build(BuildContext context) {
 
     decoration: InputDecoration(
 
-      labelText: lebel,
 
       prefixIcon: icon,
         filled: true,
       fillColor: fieldColor,
       hintText: hintText,
       hintStyle: hintTextStyle(),
-      contentPadding: EdgeInsets.symmetric(horizontal: 10),
-
+      contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 15),
+      floatingLabelBehavior: FloatingLabelBehavior.never,
       enabledBorder: OutlineInputBorder(
 
         borderSide: BorderSide(

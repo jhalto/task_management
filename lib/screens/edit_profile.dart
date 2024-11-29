@@ -35,7 +35,7 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController? _firstNameController;
   TextEditingController? _lastNameController;
   TextEditingController? _addressController;
-  String? img;
+  String? image;
 
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _EditProfileState extends State<EditProfile> {
     _firstNameController = TextEditingController(text: widget.firstName);
     _lastNameController = TextEditingController(text: widget.lastName);
     _addressController = TextEditingController(text: widget.address);
-    img = widget.image;
+    image = widget.image;
   }
   final _formKey = GlobalKey<FormState>();
   bool isObsecure1 = true;
@@ -143,7 +143,7 @@ class _EditProfileState extends State<EditProfile> {
                                       radius: 80,
                                       backgroundImage: picked != null
                                           ? FileImage(picked!)
-                                          : NetworkImage("${baseUrl}/${img}"),
+                                          : NetworkImage("${baseUrl}/${image}"),
                                     ),
                                   ),
                                   Positioned(
@@ -341,18 +341,25 @@ class _EditProfileState extends State<EditProfile> {
       request.fields['address'] = _addressController!.text.trim();
 
       if (picked != null) {
+        // Use picked image file
         var img = await http.MultipartFile.fromPath(
           "file",
           picked!.path,
           contentType: MediaType('image', 'jpeg'),
         );
         request.files.add(img);
-      } else {
-        File defaultImage = await getImageFileFromAssets('lib/images/user.png');
+      } else if (image != null && image!.isNotEmpty) {
+        // Download image from URL, save it temporarily, and attach it
+        final tempDir = await getTemporaryDirectory();
+        final tempFile = File('${tempDir.path}/temp_image.jpg');
+
+        var response = await http.get(Uri.parse("${baseUrl}/${image}"));
+        await tempFile.writeAsBytes(response.bodyBytes);
+
         var img = await http.MultipartFile.fromPath(
           "file",
-          defaultImage.path,
-          contentType: MediaType('image', 'png'), // Adjust as needed
+          tempFile.path,
+          contentType: MediaType('image', 'jpeg'),
         );
         request.files.add(img);
       }
@@ -363,19 +370,22 @@ class _EditProfileState extends State<EditProfile> {
       var data = jsonDecode(responseString);
       print("our response is $data");
       print("Response code ${response.statusCode}");
-      if(response.statusCode == 200 ){
+
+      if (response.statusCode == 200) {
         showToastMessage("Update Successful");
-        Navigator.pop(context,true);
-      }else{
+        Navigator.pop(context, true);
+      } else {
         showToastMessage("Update Not Successful");
       }
-
 
       setState(() {
         isloading = false;
       });
     } catch (e) {
       print("Error: $e");
+      setState(() {
+        isloading = false;
+      });
     }
   }
   Future<File> getImageFileFromAssets(String path) async {
